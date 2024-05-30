@@ -86,6 +86,8 @@ include "config.php";
 			include "tampil_aturan.php";
 		}elseif ($action=="tambah"){
 			include "tambah_aturan.php";
+		}elseif ($action=="detail"){
+			include "detail_aturan.php";
 		}elseif ($action=="update"){
 			include "update_penyakit.php";
 		}else{
