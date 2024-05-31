@@ -5,89 +5,94 @@ include "config.php";
 if(isset($_POST['proses'])){
 
     // mengambil data dari form
-    $nm_pasien=$_POST['nm_pasien'];
-    $tgl=date("Y/m/d");
-	
-	// prose simpan konsultasi 
-    $sql = "INSERT INTO tbl_konsultasi VALUES (NULL,'$tgl','$nm_pasien')";
-    mysqli_query($conn,$sql);
+    $nm_pasien = $conn->real_escape_string($_POST['nm_pasien']);
+    $tgl = date("Y/m/d");
+
+    // prose simpan konsultasi 
+    $sql = "INSERT INTO tbl_konsultasi (tanggal, nama) VALUES ('$tgl', '$nm_pasien')";
+    if (!mysqli_query($conn, $sql)) {
+        die('Error: ' . mysqli_error($conn));
+    }
 
     // mengambil idgejala
-    $id_gejala=$_POST['id_gejala'];
+    $id_gejala = $_POST['id_gejala'];
 
     // proses mengambil data konsultasi 
-    $sql = "SELECT * FROM tbl_konsultasi ORDER BY id_konsultasi DESC";
+    $sql = "SELECT id_konsultasi FROM tbl_konsultasi ORDER BY id_konsultasi DESC LIMIT 1";
     $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    $id_konsultasi=$row['id_konsultasi'];
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $id_konsultasi = $row['id_konsultasi'];
+    } else {
+        die('Error: Unable to retrieve consultation ID');
+    }
 
     // proses simpan detail konsultasi 
-    $jumlah = count($id_gejala);
-    $i=0;
-    while($i < $jumlah){
-        $id_gejalane=$id_gejala[$i];
-        $sql = "INSERT INTO tbl_detail_konsultasi VALUES ($id_konsultasi,'$id_gejalane')";
-        mysqli_query($conn,$sql);
-        $i++;
+    foreach ($id_gejala as $gejala) {
+        $gejala = $conn->real_escape_string($gejala);
+        $sql = "INSERT INTO tbl_detail_konsultasi (id_konsultasi, id_gejala) VALUES ('$id_konsultasi', '$gejala')";
+        if (!mysqli_query($conn, $sql)) {
+            die('Error: ' . mysqli_error($conn));
+        }
     }
 
     //mengambil data dari tabel penyakit untuk dicek di basis aturan 
     $sql = "SELECT * FROM tbl_data_penyakit";
     $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()) {
-
+    while ($row = $result->fetch_assoc()) {
         $id_penyakit = $row['id_penyakit'];
-        $jyes=0;
+        $jyes = 0;
 
         // mencari jumlah gejala di basis aturan berdasarkan penyakit
-        $sql2 = "SELECT COUNT(id_penyakit) AS jml_gejala 
-                FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
-                ON tbl_basis_aturan.id_aturan=tbl_detail_basis_aturan.id_aturan
-                WHERE id_penyakit='$id_penyakit'";
+        $sql2 = "SELECT COUNT(id_gejala) AS jml_gejala 
+                 FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
+                 ON tbl_basis_aturan.id_aturan = tbl_detail_basis_aturan.id_aturan
+                 WHERE id_penyakit = '$id_penyakit'";
         $result2 = $conn->query($sql2);
         $row2 = $result2->fetch_assoc();
-        $jml_gejala=$row2['jml_gejala'];
+        $jml_gejala = $row2['jml_gejala'];
 
         // mencari gejala pada basis aturan
-        $sql3 = "SELECT id_penyakit, id_gejala
-                FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
-                ON tbl_basis_aturan.id_aturan=tbl_detail_basis_aturan.id_aturan
-                WHERE id_penyakit='$id_penyakit'";
+        $sql3 = "SELECT id_gejala
+                 FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
+                 ON tbl_basis_aturan.id_aturan = tbl_detail_basis_aturan.id_aturan
+                 WHERE id_penyakit = '$id_penyakit'";
         $result3 = $conn->query($sql3);
-        while($row3 = $result3->fetch_assoc()) {
-
-            $id_gejalane=$row3['id_gejala'];
+        while ($row3 = $result3->fetch_assoc()) {
+            $id_gejalane = $row3['id_gejala'];
 
             // membandingkan apakah yang dipilih pada konsultasi sesuai 
             $sql4 = "SELECT id_gejala FROM tbl_detail_konsultasi
-                WHERE id_konsultasi='$id_konsultasi' AND id_gejala='$id_gejalane'";
+                     WHERE id_konsultasi = '$id_konsultasi' AND id_gejala = '$id_gejalane'";
             $result4 = $conn->query($sql4);
-            if($result->num_rows > 0){
-                $jyes+=1;
+            if ($result4->num_rows > 0) {
+                $jyes++;
             }
         }
 
-        //mencari persentase 
-        if($jml_gejala>0){
-            $peluang = round (($jyes/$jml_gejala)*100.2);
-        }else{
+        // mencari persentase 
+        if ($jml_gejala > 0) {
+            $peluang = round(($jyes / $jml_gejala) * 100);
+        } else {
             $peluang = 0;
         }
 
         // simpan data detail penyakit
-        if($peluang>0){
-            $sql = "INSERT INTO tbl_detail_penyakit VALUES ($id_konsultasi,'$id_penyakit','$peluang')";
-            mysqli_query($conn,$sql);
+        if ($peluang > 0) {
+            $sql = "INSERT INTO tbl_detail_penyakit (id_konsultasi, id_penyakit) VALUES ('$id_konsultasi', '$id_penyakit')";
+            if (!mysqli_query($conn, $sql)) {
+                die('Error: ' . mysqli_error($conn));
+            }
         }
-        
-        //header("Location:?page=konsultasi&action=hasil&id_konsultasi=$id_konsultasi");
     }
 
-
+    // Redirect to results page
+    //header("Location:?page=konsultasi&action=hasil&id_konsultasi=$id_konsultasi");
+    //exit;
 }
 
-
 ?>
+
 
 
 <div class="row">
