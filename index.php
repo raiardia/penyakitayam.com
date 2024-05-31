@@ -42,7 +42,7 @@ include "config.php";
       <a class="nav-link" href="?page=aturan">Basis Aturan</a>
     </li>
 	<li class="nav-item active">
-      <a class="nav-link disabled" href="#">Konsultasi</a>
+      <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
     </li>
 	<li class="nav-item active">
       <a class="nav-link disabled" href="#">Logout</a>
@@ -94,6 +94,16 @@ include "config.php";
 			include "hapus_detail_aturan.php";
 		}else{
 			include "hapus_aturan.php";
+		}
+	}elseif ($page=="konsultasi"){
+		if ($action==""){
+			include "tampil_konsultasi.php";
+		}elseif ($action=="tambah"){
+			include "tambah_penyakit.php";
+		}elseif ($action=="update"){
+			include "update_penyakit.php";
+		}else{
+			include "hapus_penyakit.php";
 		}
 	}else{
 		include "NAMA_HALAMAN";
