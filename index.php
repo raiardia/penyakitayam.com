@@ -88,7 +88,7 @@ include "config.php";
 			include "tambah_aturan.php";
 		}elseif ($action=="detail"){
 			include "detail_aturan.php";
-		}elseif ($action=="detail"){
+		}elseif ($action=="update"){
 			include "update_aturan.php";
 		}elseif ($action=="hapus_gejala"){
 			include "hapus_detail_aturan.php";

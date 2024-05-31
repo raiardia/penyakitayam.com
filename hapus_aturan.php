@@ -3,13 +3,15 @@
 $id_aturan=$_GET['id'];
 
 // hapus basis aturan 
-$sql = "DELETE FROM tbl_basis_aturan WHERE id_aturanan='$id_aturanan'";
+$sql = "DELETE FROM tbl_basis_aturan WHERE id_aturan='$id_aturan'";
 $conn->query($sql);
 
 // hapus detail basis aturan 
-$sql = "DELETE FROM tbl_detail_basis_aturan WHERE id_aturanan='$id_aturanan'";
+$sql = "DELETE FROM tbl_detail_basis_aturan WHERE id_aturan='$id_aturan'";
 $conn->query($sql);
 
-    header("Location:?page=aturan");
 $conn->close();
+
+    header("Location:?page=aturan");
+
 ?>
