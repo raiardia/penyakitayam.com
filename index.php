@@ -32,6 +32,9 @@ include "config.php";
     <li class="nav-item active">
       <a class="nav-link" href="index.php">Home</a>
     </li>
+	<li class="nav-item active">
+      <a class="nav-link" href="?page=user">User</a>
+    </li>
     <li class="nav-item active">
       <a class="nav-link" href="?page=gejala">Gejala</a>
     </li>
@@ -100,6 +103,16 @@ include "config.php";
 			include "tampil_konsultasi.php";
 		}else{
 			include "hasil_konsultasi.php";
+		}
+	}elseif ($page=="user"){
+		if ($action==""){
+			include "tampil_user.php";
+		}elseif ($action=="tambah"){
+			include "tambah_penyakit.php";
+		}elseif ($action=="update"){
+			include "update_penyakit.php";
+		}else{
+			include "hapus_penyakit.php";
 		}
 	}else{
 		include "NAMA_HALAMAN";
