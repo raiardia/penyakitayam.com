@@ -4,20 +4,20 @@ include "config.php";
 
 if(isset($_POST['proses'])){
 
-    // mengambil data dari form
+    // Mengambil data dari form
     $nm_pasien = $conn->real_escape_string($_POST['nm_pasien']);
     $tgl = date("Y/m/d");
 
-    // prose simpan konsultasi 
+    // Proses simpan konsultasi 
     $sql = "INSERT INTO tbl_konsultasi (tanggal, nama) VALUES ('$tgl', '$nm_pasien')";
     if (!mysqli_query($conn, $sql)) {
         die('Error: ' . mysqli_error($conn));
     }
 
-    // mengambil idgejala
+    // Mengambil idgejala
     $id_gejala = $_POST['id_gejala'];
 
-    // proses mengambil data konsultasi 
+    // Proses mengambil data konsultasi 
     $sql = "SELECT id_konsultasi FROM tbl_konsultasi ORDER BY id_konsultasi DESC LIMIT 1";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -27,7 +27,7 @@ if(isset($_POST['proses'])){
         die('Error: Unable to retrieve consultation ID');
     }
 
-    // proses simpan detail konsultasi 
+    // Proses simpan detail konsultasi 
     foreach ($id_gejala as $gejala) {
         $gejala = $conn->real_escape_string($gejala);
         $sql = "INSERT INTO tbl_detail_konsultasi (id_konsultasi, id_gejala) VALUES ('$id_konsultasi', '$gejala')";
@@ -36,14 +36,15 @@ if(isset($_POST['proses'])){
         }
     }
 
-    //mengambil data dari tabel penyakit untuk dicek di basis aturan 
+    // Mengambil data dari tabel penyakit untuk dicek di basis aturan 
     $sql = "SELECT * FROM tbl_data_penyakit";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
         $id_penyakit = $row['id_penyakit'];
+        $nm_penyakit = $row['nm_penyakit']; // Menyimpan nama penyakit dari hasil query
         $jyes = 0;
 
-        // mencari jumlah gejala di basis aturan berdasarkan penyakit
+        // Mencari jumlah gejala di basis aturan berdasarkan penyakit
         $sql2 = "SELECT COUNT(id_gejala) AS jml_gejala 
                  FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
                  ON tbl_basis_aturan.id_aturan = tbl_detail_basis_aturan.id_aturan
@@ -52,7 +53,7 @@ if(isset($_POST['proses'])){
         $row2 = $result2->fetch_assoc();
         $jml_gejala = $row2['jml_gejala'];
 
-        // mencari gejala pada basis aturan
+        // Mencari gejala pada basis aturan
         $sql3 = "SELECT id_gejala
                  FROM tbl_basis_aturan INNER JOIN tbl_detail_basis_aturan
                  ON tbl_basis_aturan.id_aturan = tbl_detail_basis_aturan.id_aturan
@@ -61,7 +62,7 @@ if(isset($_POST['proses'])){
         while ($row3 = $result3->fetch_assoc()) {
             $id_gejalane = $row3['id_gejala'];
 
-            // membandingkan apakah yang dipilih pada konsultasi sesuai 
+            // Membandingkan apakah yang dipilih pada konsultasi sesuai 
             $sql4 = "SELECT id_gejala FROM tbl_detail_konsultasi
                      WHERE id_konsultasi = '$id_konsultasi' AND id_gejala = '$id_gejalane'";
             $result4 = $conn->query($sql4);
@@ -70,16 +71,18 @@ if(isset($_POST['proses'])){
             }
         }
 
-        // mencari persentase 
+        // Mencari persentase 
         if ($jml_gejala > 0) {
-            $peluang = round(($jyes / $jml_gejala) * 100);
+            $peluang = round(($jyes / $jml_gejala) * 100.0);
         } else {
             $peluang = 0;
         }
 
-        // simpan data detail penyakit
+        echo "Penyakit: $nm_penyakit, Peluang: $peluang % <br>";
+
+        // Simpan data detail penyakit
         if ($peluang > 0) {
-            $sql = "INSERT INTO tbl_detail_penyakit (id_konsultasi, id_penyakit) VALUES ('$id_konsultasi', '$id_penyakit')";
+            $sql = "INSERT INTO tbl_detail_penyakit (id_konsultasi, id_penyakit, peluang) VALUES ('$id_konsultasi', '$id_penyakit', '$peluang')";
             if (!mysqli_query($conn, $sql)) {
                 die('Error: ' . mysqli_error($conn));
             }
@@ -90,8 +93,8 @@ if(isset($_POST['proses'])){
     //header("Location:?page=konsultasi&action=hasil&id_konsultasi=$id_konsultasi");
     //exit;
 }
-
 ?>
+
 
 
 
