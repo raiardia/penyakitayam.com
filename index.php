@@ -110,9 +110,9 @@ include "config.php";
 		}elseif ($action=="tambah"){
 			include "tambah_user.php";
 		}elseif ($action=="update"){
-			include "update_penyakit.php";
+			include "update_user.php";
 		}else{
-			include "hapus_penyakit.php";
+			include "hapus_.php";
 		}
 	}else{
 		include "NAMA_HALAMAN";

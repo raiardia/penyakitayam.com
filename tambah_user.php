@@ -19,7 +19,6 @@ if(isset($_POST['simpan'])){
 ?>
 
 
-
 <div class="row">
     <div class="col-sm-12">
         <form action="" method="POST">
