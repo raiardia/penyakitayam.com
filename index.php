@@ -30,29 +30,40 @@ include "config.php";
 
 <!-- navbar -->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <ul class="navbar-nav">
-    <li class="nav-item active">
-      <a class="nav-link" href="index.php">Home</a>
-    </li>
-	<li class="nav-item active">
-      <a class="nav-link" href="?page=user">User</a>
-    </li>
-    <li class="nav-item active">
-      <a class="nav-link" href="?page=gejala">Gejala</a>
-    </li>
-    <li class="nav-item active">
-      <a class="nav-link" href="?page=penyakit">Penyakit</a>
-    </li>
-    <li class="nav-item active">
-      <a class="nav-link" href="?page=aturan">Basis Aturan</a>
-    </li>
-	<li class="nav-item active">
-      <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
-    </li>
-	<li class="nav-item active">
-      <a class="nav-link" href="?page=logout">Logout</a>
-    </li>
-  </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.php">Home</a>
+        </li>
+
+        <?php if(isset($_SESSION['role']) && $_SESSION['role'] == "Admin"): ?>
+            <!-- Menu untuk Admin -->
+            <li class="nav-item">
+                <a class="nav-link" href="?page=user">User</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?page=gejala">Gejala</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?page=penyakit">Penyakit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?page=aturan">Basis Aturan</a>
+            </li>
+			<li class="nav-item">
+                <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
+            </li>
+        <?php else: ?>
+            <!-- Menu untuk Pengguna biasa -->
+            <li class="nav-item">
+                <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
+            </li>
+        <?php endif; ?>
+
+        <!-- Menu untuk semua pengguna -->
+        <li class="nav-item">
+            <a class="nav-link" href="?page=logout">Logout</a>
+        </li>
+    </ul>
 </nav>
 
 
