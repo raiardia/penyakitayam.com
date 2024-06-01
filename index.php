@@ -108,7 +108,7 @@ include "config.php";
 		if ($action==""){
 			include "tampil_user.php";
 		}elseif ($action=="tambah"){
-			include "tambah_penyakit.php";
+			include "tambah_user.php";
 		}elseif ($action=="update"){
 			include "update_penyakit.php";
 		}else{
