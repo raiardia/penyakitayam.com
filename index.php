@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // koneksi database
 include "config.php";
 
@@ -52,6 +54,15 @@ include "config.php";
     </li>
   </ul>
 </nav>
+
+
+<!-- cek status login -->
+<?php 
+    if($_SESSION['status']!="y"){
+        header("Location:login.php");
+    }
+?>
+
 
 <!-- container -->
 <div class="container">
