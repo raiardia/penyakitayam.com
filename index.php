@@ -50,7 +50,7 @@ include "config.php";
       <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
     </li>
 	<li class="nav-item active">
-      <a class="nav-link disabled" href="#">Logout</a>
+      <a class="nav-link" href="?page=logout">Logout</a>
     </li>
   </ul>
 </nav>
@@ -126,7 +126,7 @@ include "config.php";
 			include "hapus_user.php";
 		}
 	}else{
-		include "NAMA_HALAMAN";
+		include "logout.php";
 	}
 	?>
 </div> 
