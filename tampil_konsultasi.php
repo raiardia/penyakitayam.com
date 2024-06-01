@@ -78,8 +78,6 @@ if(isset($_POST['proses'])){
             $peluang = 0;
         }
 
-        echo "Penyakit: $nm_penyakit, Peluang: $peluang % <br>";
-
         // Simpan data detail penyakit
         if ($peluang > 0) {
             $sql = "INSERT INTO tbl_detail_penyakit (id_konsultasi, id_penyakit, peluang) VALUES ('$id_konsultasi', '$id_penyakit', '$peluang')";
@@ -87,11 +85,9 @@ if(isset($_POST['proses'])){
                 die('Error: ' . mysqli_error($conn));
             }
         }
-    }
-
-    // Redirect to results page
-    //header("Location:?page=konsultasi&action=hasil&id_konsultasi=$id_konsultasi");
-    //exit;
+    
+    header("Location:?page=konsultasi&action=hasil&id_konsultasi=$id_konsultasi");
+    }  
 }
 ?>
 
