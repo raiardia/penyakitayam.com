@@ -112,7 +112,7 @@ include "config.php";
 		}elseif ($action=="update"){
 			include "update_user.php";
 		}else{
-			include "hapus_.php";
+			include "hapus_user.php";
 		}
 	}else{
 		include "NAMA_HALAMAN";
