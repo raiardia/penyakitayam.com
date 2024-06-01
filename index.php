@@ -130,7 +130,7 @@ include "config.php";
 		if ($action==""){
 			include "tampil_konsultasiadmin.php";
 		}else{
-			include "hasil_konsultasi.php";
+			include "detail_konsultasiadmin.php";
 		}
 	}elseif ($page=="user"){
 		if ($action==""){
