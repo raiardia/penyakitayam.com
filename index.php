@@ -50,7 +50,7 @@ include "config.php";
                 <a class="nav-link" href="?page=aturan">Basis Aturan</a>
             </li>
 			<li class="nav-item">
-                <a class="nav-link" href="?page=konsultasi">Konsultasi</a>
+                <a class="nav-link" href="?page=konsultasiadmin">Konsultasi</a>
             </li>
         <?php else: ?>
             <!-- Menu untuk Pengguna biasa -->
@@ -123,6 +123,12 @@ include "config.php";
 	}elseif ($page=="konsultasi"){
 		if ($action==""){
 			include "tampil_konsultasi.php";
+		}else{
+			include "hasil_konsultasi.php";
+		}
+	}elseif ($page=="konsultasiadmin"){
+		if ($action==""){
+			include "tampil_konsultasiadmin.php";
 		}else{
 			include "hasil_konsultasi.php";
 		}
