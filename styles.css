@@ -2,8 +2,30 @@
     margin-right: 20px;
 }
 
-.container {
-    margin-top: 50px;
+.greeting {
+            background-image: url('ayam 3.jpg'); /* Pastikan path ke gambar benar */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            min-height: 100vh; /* Tinggi minimum 100% dari tinggi viewport */
+            width: 100vw; /* Lebar setara dengan lebar viewport */
+            margin-left: calc(50% - 50vw); /* Menarik elemen ke kiri untuk menutupi seluruh lebar layar */
+            text-align: center;
+            color: white; /* Mengubah warna teks agar kontras dengan background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 }
 
+
+.text-right {
+    text-align: right; /* Teks diatur ke kanan */
+    max-width: 600px; /* Lebar maksimum konten */
+    padding: 20px; /* Padding di dalam konten */
+    background-color: rgba(0, 0, 0, 0.5); /* Warna latar belakang dengan opasitas */
+    border-radius: 10px; /* Sudut bulat untuk elemen */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Efek bayangan */
+}
 
